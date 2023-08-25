@@ -7,7 +7,6 @@ mod repository;
 
 #[derive(Serialize)]
 pub struct Response {
-    // pub status: String,
     pub message: String,
 }
 
@@ -28,6 +27,7 @@ async fn not_found() -> Result<HttpResponse> {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    femme::start();
     let todo_db = repository::database::Database::new();
     let app_data = web::Data::new(todo_db);
 
