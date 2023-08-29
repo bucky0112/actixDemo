@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  db:
-    container_name: postgres
+  pg:
+    container_name: docker_pg
     image: postgres:14.9-alpine
     restart: always
     environment:
