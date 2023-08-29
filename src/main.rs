@@ -1,26 +1,34 @@
-use actix_web::{get, web, App, HttpResponse, HttpServer, Responder, Result};
-use serde::Serialize;
-
 mod api;
 mod models;
 mod repository;
+
+use actix_web::{get, web, App, HttpResponse, HttpServer, Responder, Result};
+use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct Response {
     pub message: String,
 }
 
+#[get("/")]
+async fn index() -> impl Responder {
+    let response = Response {
+        message: "Hello, world!".to_string(),
+    };
+    HttpResponse::Ok().json(response)
+}
+
 #[get("/health")]
 async fn healthcheck() -> impl Responder {
     let response = Response {
-        message: "Everything is working fine".to_string(),
+        message: "All good".to_string(),
     };
     HttpResponse::Ok().json(response)
 }
 
 async fn not_found() -> Result<HttpResponse> {
     let response = Response {
-        message: "Resource not found".to_string(),
+        message: "Not found".to_string(),
     };
     Ok(HttpResponse::NotFound().json(response))
 }
@@ -35,6 +43,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(app_data.clone())
             .configure(api::api::config)
+            .service(index)
             .service(healthcheck)
             .default_service(web::route().to(not_found))
             .wrap(actix_web::middleware::Logger::default())
