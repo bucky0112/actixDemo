@@ -31,10 +31,11 @@ impl Database {
     }
 
     pub fn create_todo(&self, todo: Todo) -> Result<Todo, Error> {
+        let current_time = Utc::now().naive_utc();
         let todo = Todo {
             id: uuid::Uuid::new_v4().to_string(),
-            created_at: Some(Utc::now().naive_utc()),
-            updated_at: Some(Utc::now().naive_utc()),
+            created_at: Some(current_time),
+            updated_at: Some(current_time),
             ..todo
         };
         diesel::insert_into(todos)
